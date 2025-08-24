@@ -1,3 +1,9 @@
+// Initialize Supabase client
+const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";  // Replace with your Supabase project URL
+const SUPABASE_KEY = "YOUR_PUBLIC_ANON_KEY"; // Replace with your Supabase anon/public API key
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// =================== LANGUAGE TOGGLE ===================
 function openLanguageModal() {
   document.getElementById('languageModal').style.display = 'block';
 }
@@ -11,33 +17,59 @@ function selectLanguage(language) {
   closeLanguageModal();
 }
 
-function loginUser() {
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
-  const users = JSON.parse(localStorage.getItem("users")) || [];
+// =================== LOGIN ===================
+async function loginUser() {
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
 
-  const found = users.find(user => user.username === username && user.password === password);
+  if (!username || !password) {
+    alert("Please enter username and password");
+    return;
+  }
 
-  if (found) {
-    alert("Login successful");
-    window.location.href = "home.html";
-  } else {
+  // Check user in Supabase
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("username", username)
+    .eq("password", password)  // NOTE: plain text for demo, not secure!
+    .single();
+
+  if (error || !data) {
     alert("Invalid credentials");
+  } else {
+    alert("Login successful!");
+    localStorage.setItem("currentUser", JSON.stringify(data));
+    window.location.href = "home.html";
   }
 }
 
-function registerUser() {
-  const username = document.getElementById("newUsername").value;
-  const password = document.getElementById("newPassword").value;
-  const users = JSON.parse(localStorage.getItem("users")) || [];
+// =================== REGISTER ===================
+async function registerUser() {
+  const username = document.getElementById("newUsername").value.trim();
+  const password = document.getElementById("newPassword").value.trim();
 
-  users.push({ username, password });
-  localStorage.setItem("users", JSON.stringify(users));
-  alert("Registration successful");
-  window.location.href = "index.html";
+  if (!username || !password) {
+    alert("Please enter username and password");
+    return;
+  }
+
+  // Insert into Supabase
+  const { data, error } = await supabase
+    .from("users")
+    .insert([{ username, password }]);
+
+  if (error) {
+    alert("Error registering: " + error.message);
+  } else {
+    alert("Registration successful!");
+    window.location.href = "index.html";
+  }
 }
 
+// =================== LOGOUT ===================
 function logoutUser() {
+  localStorage.removeItem("currentUser");
   alert("Logged out");
   window.location.href = "index.html";
 }

