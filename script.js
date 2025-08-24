@@ -1,9 +1,6 @@
-// Initialize Supabase client
-const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";  // Replace with your Supabase project URL
-const SUPABASE_KEY = "YOUR_PUBLIC_ANON_KEY"; // Replace with your Supabase anon/public API key
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// ==================== Auth JS (frontend) ====================
 
-// =================== LANGUAGE TOGGLE ===================
+// ✅ Language Modal Functions
 function openLanguageModal() {
   document.getElementById('languageModal').style.display = 'block';
 }
@@ -17,59 +14,83 @@ function selectLanguage(language) {
   closeLanguageModal();
 }
 
-// =================== LOGIN ===================
+// ==================== Login Function ====================
 async function loginUser() {
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
 
   if (!username || !password) {
-    alert("Please enter username and password");
+    alert("Please fill in all fields.");
     return;
   }
 
-  // Check user in Supabase
-  const { data, error } = await supabase
-    .from("users")
-    .select("*")
-    .eq("username", username)
-    .eq("password", password)  // NOTE: plain text for demo, not secure!
-    .single();
+  try {
+    const res = await fetch("http://localhost:5000/save-login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
+    });
 
-  if (error || !data) {
-    alert("Invalid credentials");
-  } else {
-    alert("Login successful!");
-    localStorage.setItem("currentUser", JSON.stringify(data));
+    const data = await res.json();
+
+    if (!data.success) {
+      alert("Invalid credentials or server error");
+      return;
+    }
+
+    // Save logged-in user locally
+    localStorage.setItem("loggedInUser", username);
+    alert("Login successful");
     window.location.href = "home.html";
+  } catch (err) {
+    console.error("Login error:", err);
+    alert("Login failed. Check console for details.");
   }
 }
 
-// =================== REGISTER ===================
+// ==================== Register Function ====================
 async function registerUser() {
   const username = document.getElementById("newUsername").value.trim();
   const password = document.getElementById("newPassword").value.trim();
 
   if (!username || !password) {
-    alert("Please enter username and password");
+    alert("Please fill in all fields.");
     return;
   }
 
-  // Insert into Supabase
-  const { data, error } = await supabase
-    .from("users")
-    .insert([{ username, password }]);
+  try {
+    const res = await fetch("http://localhost:5000/save-login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
+    });
 
-  if (error) {
-    alert("Error registering: " + error.message);
-  } else {
-    alert("Registration successful!");
+    const data = await res.json();
+
+    if (!data.success) {
+      alert("Registration failed: " + (data.error || ""));
+      return;
+    }
+
+    alert("Registration successful");
     window.location.href = "index.html";
+  } catch (err) {
+    console.error("Registration error:", err);
+    alert("Registration failed. Check console for details.");
   }
 }
 
-// =================== LOGOUT ===================
+// ==================== Logout Function ====================
 function logoutUser() {
-  localStorage.removeItem("currentUser");
+  localStorage.removeItem("loggedInUser");
   alert("Logged out");
   window.location.href = "index.html";
+}
+
+// ==================== Check if user is logged in ====================
+function checkLoggedIn() {
+  const user = localStorage.getItem("loggedInUser");
+  if (!user) {
+    window.location.href = "index.html";
+  }
 }
